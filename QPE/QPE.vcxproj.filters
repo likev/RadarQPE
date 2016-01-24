@@ -19,4 +19,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\dealdate.js">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="resource\logr.csv">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="resource\rain_57071-2015-morethan10.xlsx">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="resource\rain_57071-20151025-rain1str.csv">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="resource\rain_station.csv">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
 </Project>

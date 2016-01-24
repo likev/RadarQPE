@@ -144,6 +144,13 @@
   <ItemGroup>
     <ClCompile Include="QPE-main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\dealdate.js" />
+    <None Include="resource\logr.csv" />
+    <None Include="resource\rain_57071-2015-morethan10.xlsx" />
+    <None Include="resource\rain_57071-20151025-rain1str.csv" />
+    <None Include="resource\rain_station.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
