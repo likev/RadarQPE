@@ -4,11 +4,13 @@
 #include <fstream>
 #include <iostream>
 
+//使用给定的Z-R关系 从dBZ获取降水率
 double get_R_from_dBZ(double dBZ, double A = 300, double b = 1.4)
 {
 	return pow(10, (dBZ - 10 * log10(A)) / (10 * b));
 }
 
+//给定某一仰角数据 获取某个方位角和距离上的反射率因子
 double get_dbZ(const std::vector<std::vector<double> > & r, unsigned az, unsigned gate)
 {
 	using point = std::pair<unsigned, unsigned>;
@@ -58,6 +60,7 @@ int main()
 		f240("2.40.txt"),
 		f335("3.35.txt");
 
+	//读取给定雷达基数据归档文件 输出扫描时间 某一点不同仰角dBZ
 	while (fin >> temp)
 	{
 		fin >> temp >> temp;
