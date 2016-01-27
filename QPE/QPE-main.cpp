@@ -43,24 +43,16 @@ double get_dbZ(const std::vector<std::vector<double> > & r, unsigned az, unsigne
 }
 
 
-int main()
+int out_dBZ(const std::vector<std::string>& elevs, 
+	const std::map<std::string, std::pair<unsigned ,unsigned > >& stations)
 {
 	std::string temp, filename, path = "Z:/swap/radar-luoyang-2015/10/";
-
-	//std::cout << "输入雷达基数据文件名(输入0使用测试文件Z_RADR_I_Z9398_20120717041200_O_DOR_SB_CAP.bin)：\n";
-	//std::cin >> filename;
-
-	//if (filename == "0") filename = "2015102506.57A";
 
 	SA_SB_Info radar;
 
 	std::ifstream fin("filenames.txt");
-	std::ofstream f050("0.5.txt"),
-		f145("1.45.txt"),
-		f240("2.40.txt"),
-		f335("3.35.txt");
 
-	//读取给定雷达基数据归档文件 输出扫描时间 某一点不同仰角dBZ
+	//读取给定雷达基数据归档文件 输出扫描时间 各站不同仰角dBZ
 	while (fin >> temp)
 	{
 		fin >> temp >> temp;
@@ -82,43 +74,45 @@ int main()
 		std::cout << std::endl;
 
 
-
-		auto elev = radar("0.50");
-		double dBZ = 0;
-
-		if (elev.r_valid)
+		for (const auto& elev : elevs)//各仰角
 		{
-			dBZ = get_dbZ(elev.r, 0, 30);
-			f050 << elev.date_begin << ' ' << elev.seconds_begin << ' ' << dBZ << ' ' << get_R_from_dBZ(dBZ) << std::endl;
+			auto elev_data = radar(elev);
+			double dBZ = 0;
+
+			if (elev_data.r_valid)
+			{
+				for (const auto& station : stations)//各站
+				{
+					auto name = station.first;
+					auto position = station.second;
+
+					dBZ = get_dbZ(elev_data.r, position.first, position.second);
+
+					std::ofstream fout(name + "-" + elev + ".txt", std::ios_base::out|std::ios_base::app);
+					fout << elev_data.date_begin << ' ' << elev_data.seconds_begin << ' ' << dBZ << ' ' << get_R_from_dBZ(dBZ) << std::endl;
+				}
+
+			}
 		}
 
-		elev = radar("1.45");
-
-		if (elev.r_valid)
-		{
-			dBZ = get_dbZ(elev.r, 0, 30);
-			f145 << elev.date_begin << ' ' << elev.seconds_begin << ' ' << dBZ << ' ' << get_R_from_dBZ(dBZ) << std::endl;
-		}
-
-		elev = radar("2.40");
-
-		if (elev.r_valid)
-		{
-			dBZ = get_dbZ(elev.r, 0, 30);
-			f240 << elev.date_begin << ' ' << elev.seconds_begin << ' ' << dBZ << ' ' << get_R_from_dBZ(dBZ) << std::endl;
-		}
-
-		elev = radar("3.35");
-
-		if (elev.r_valid)
-		{
-			dBZ = get_dbZ(elev.r, 0, 30);
-			f335 << elev.date_begin << ' ' << elev.seconds_begin << ' ' << dBZ << ' ' << get_R_from_dBZ(dBZ) << std::endl;
-		}
 	}
 
-	f050.close(); f145.close(); f240.close(); f335.close();
 
 	//std::ofstream fout("log.txt");
 	//radar.out_info(fout);
+
+	return 0;
+}
+
+int main()
+{
+	std::vector<std::string> elevs = { "0.50" ,"1.45", "2.40", "3.35" };
+
+	std::map<std::string, std::pair<unsigned, unsigned > > stations = {
+		{"57071", std::make_pair(0, 30) },
+
+		{ "57076", std::make_pair(256, 74) }
+	};
+
+	out_dBZ(elevs, stations);
 }
