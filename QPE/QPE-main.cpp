@@ -111,7 +111,7 @@ int main()
 	std::map<std::string, std::pair<unsigned, unsigned > > stations = {
 		{"57071", std::make_pair(0, 30) },
 
-		{ "57076", std::make_pair(256, 74) }
+		{ "57066", std::make_pair(256, 74) }
 	};
 
 	out_dBZ(elevs, stations);
